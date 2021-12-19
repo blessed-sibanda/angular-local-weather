@@ -5,22 +5,30 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: circleci/node:lts-browsers
+    working_directory: ~/repo
     steps:
       - checkout
+
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm ci
+
+      - run: npm run build
+      - run: npm run test -- --watch=false
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Tar & Gzip compiled app
+          command: tar zcf dist.tar.gz dist/local-weather
+      - store_artifacts:
+          path: dist.tar.gz
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  version: 2
+  build-and-test:
     jobs:
-      - say-hello
+      - build
