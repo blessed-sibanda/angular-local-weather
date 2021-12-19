@@ -13,8 +13,8 @@ jobs:
       - checkout
 
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "package-lock.json" }}
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm ci
 
       - run: npm run build
