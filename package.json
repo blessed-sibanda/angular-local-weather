@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "prenow:publish": "npm run build",
+    "now:publish": "now --platform-version 2 dist/local-weather"
   },
   "private": true,
   "dependencies": {
