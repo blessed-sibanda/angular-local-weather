@@ -8,18 +8,9 @@ import { WeatherService } from '../weather.service';
   styleUrls: ['./current-weather.component.scss'],
 })
 export class CurrentWeatherComponent implements OnInit {
-  current: ICurrentWeather;
+  current: ICurrentWeather | undefined;
 
-  constructor(private weatherService: WeatherService) {
-    this.current = {
-      city: 'Gweru',
-      country: 'ZW',
-      date: new Date(),
-      image: 'assets/img/sunny.svg',
-      temperature: 25,
-      description: 'sunny',
-    };
-  }
+  constructor(private weatherService: WeatherService) {}
 
   ngOnInit(): void {
     this.weatherService
